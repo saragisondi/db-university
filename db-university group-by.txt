@@ -4,15 +4,17 @@ FROM `students`
 GROUP BY YEAR(`enrolment_date`);
 
 2.
-SELECT COUNT(*) AS `num_insegnanti`, `office_address` AS `uffici_nello_stesso_edificio`
+SELECT COUNT(*) AS `num_insegnanti`, `office_address`
 FROM `teachers` 
 GROUP BY `office_address`;
+HAVING COUNT(*)>1;
+ORDER BY  `num_teachers`, `office_address`;
 
 3.
 SELECT AVG(`vote`)
 FROM `exam_student`;
 
 4.
-SELECT COUNT(*) AS `num_corsi`, `name`, `department_id` AS `numero_corsi_per_dipartimento`
+SELECT COUNT(*) AS `num_corsi`, `department_id` AS `numero_corsi_per_dipartimento`
 FROM `degrees` 
-GROUP BY `numero_corsi_per_dipartimento`, `name`;
+GROUP BY `numero_corsi_per_dipartimento`;
