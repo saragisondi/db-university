@@ -1,5 +1,5 @@
 1.
-SELECT `students`.`name` AS 'Name_students', `students`.`surname` AS 'surname_students', `degrees`.`name` AS 'name_degrees'
+SELECT `students`.`name` AS 'Name_students', `students`.`surname` AS 'surname_students', `students`.`registration_number`, `degrees`.`name` AS 'name_degrees'
 FROM `students`
 INNER JOIN `degrees`
 ON `students`.`degree_id` = `degrees`.`id`
@@ -10,7 +10,8 @@ SELECT `departments`.`name` AS `name_departments`, `degrees`.`name`AS `name_degr
 FROM `degrees`
 INNER JOIN `departments`
 ON `departments`.`id`=`degrees`.`department_id`
-WHERE `departments`.`name`= "dipartimento di neuroscienze";
+WHERE `departments`.`name`= "dipartimento di neuroscienze"
+AND `degrees`.`level` = 'magistrale';
 
 3.
 SELECT `teachers`.`name` AS `teacher_name`,`teachers`.`surname` AS `teacher_surname`,`teachers`.`id`,`courses`.`name`AS `courses_name`
@@ -42,7 +43,7 @@ ON `course_teacher`.`teacher_id` = `teachers`.`id`;
 
 
 6.
-SELECT DISTINCT `teachers`.`name` AS `teachers_name`, `teachers`.`surname` AS `teachers_surname`, `departments`.`name` AS `departments_name`
+SELECT DISTINCT `teachers`.`name` AS `teachers_name`, `teachers`.`surname` AS `teachers_surname`,`teachers`.`email`, `departments`.`name` AS `departments_name`
 FROM `teachers`
 INNER JOIN `course_teacher`
 ON `teachers`.`id` = `course_teacher`.`teacher_id`
@@ -56,9 +57,13 @@ WHERE `departments`.`name` = "dipartimento di matematica";
 
 
 7.
-SELECT `students`.`name` AS `students_name`, `students`.`surname` AS `students_surname`,COUNT(`exam_student`.`exam_id`), `exam_student`.`student_id`, MAX( `exam_student`.`vote`)
+SELECT `students`.`name` AS `students_name`, `students`.`surname` AS `students_surname`,`students`.`registration_number`,COUNT(`exam_student`.`exam_id`) AS `numero_tentativi`, `exam_student`.`student_id`, MAX( `exam_student`.`vote`) AS `max_vote`, `courses`.`name` AS `courses_name`
 FROM `students`
 INNER JOIN `exam_student`
 ON `exam_student`.`student_id` = `students`.`id`
+INNER JOIN `exams`
+ON `exams`.`id`= `exam_student`.`exam_id`
+INNER JOIN `courses`
+ON `courses`.`id` = `exams`.`course_id`
 WHERE  `exam_student`.`vote` >= 18
-GROUP BY `students`.`id`, `exam_student`.`vote`;
+GROUP BY `students`.`id`, `courses`.`id`,  `exam_student`.`vote`;
